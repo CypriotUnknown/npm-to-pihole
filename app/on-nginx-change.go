@@ -51,7 +51,6 @@ func (app *AppType) createExecuter() (debounced func(), cancel func()) {
 					})
 				}
 			}
-			wg.Done()
 		})
 
 		wg.Wait()
