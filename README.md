@@ -58,7 +58,7 @@ PIHOLE_PASSWORD=yourpassword NGINX_PROXY_DIR=/path/to/proxy_host ./npm-to-pihole
 ## Security considerations
 
 - The HTTP client disables TLS verification for Pi-hole (accepts self-signed certificates). Only deploy this in trusted networks.
-- Keep Pi-hole credentials safe. Using Docker secrets or an environment management solution is recommended for production.
+- Keep Pi-hole credentials safe.
 
 ## Troubleshooting
 
