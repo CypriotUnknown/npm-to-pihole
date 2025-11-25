@@ -1,0 +1,21 @@
+---
+volumes:
+  nginx:
+    external: true
+
+networks:
+  pihole:
+    external: true
+
+services:
+  npm_to_pihole:
+    container_name: NTP
+    image: gitlab.com/cypriotunknown/npm-to-pihole
+    restart: unless-stopped
+    volumes:
+      - nginx:/data/nginx:ro
+    networks:
+      - pihole
+    environment:
+      PIHOLE_PASSWORD: <PIHOLE APP PASSWORD>
+      NGINX_PROXY_DIR: /data/nginx/nginx/proxy_host # optional - this is the default path - must match the volume target mount
