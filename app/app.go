@@ -73,6 +73,13 @@ func Start() {
 	executeChanges, cancelExecuter := app.createExecuter()
 	defer cancelExecuter()
 
+	runOnStart := os.Getenv("RUN_ON_START")
+	if runOnStart == "true" {
+		executeChanges()
+	} else if runOnStart != "" && runOnStart != "false" {
+		panic("invalid value for 'RUN_ON_START'. if specified, it can only be true or false.")
+	}
+
 	go app.authenticatePihole()
 
 	for {
