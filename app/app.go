@@ -38,7 +38,6 @@ func Start() {
 	nginxProxyDir, nginxProxyDirExists := os.LookupEnv("NGINX_PROXY_DIR")
 	if !nginxProxyDirExists {
 		const nginx_dir = "/data/nginx/nginx/proxy_host"
-		slog.Info("'NGINX_PROXY_DIR' not found in the environment. setting default.", "NGINX_PROXY_DIR", nginx_dir)
 		nginxProxyDir = nginx_dir
 	}
 
@@ -81,6 +80,8 @@ func Start() {
 	}
 
 	go app.authenticatePihole()
+
+	slog.Info("Watching for changes in Nginx proxy configuration files...")
 
 	for {
 		select {
