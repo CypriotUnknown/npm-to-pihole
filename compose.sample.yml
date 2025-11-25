@@ -10,7 +10,7 @@ networks:
 services:
   npm_to_pihole:
     container_name: NTP
-    image: gitlab.com/cypriotunknown/npm-to-pihole
+    image: registry.gitlab.com/cypriotunknown/npm-to-pihole
     restart: unless-stopped
     volumes:
       - nginx:/data/nginx:ro
