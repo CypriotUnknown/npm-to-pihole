@@ -19,6 +19,7 @@ type AppType struct {
 	ctx            context.Context
 	cancelCtx      context.CancelCauseFunc
 	PiholePassword string
+	PiholeURL      string
 	mginxProxyDir  string
 	PiholeAuth     *models.PiholeAuthResponse
 	httpClient     *http.Client
@@ -30,6 +31,11 @@ func (app *AppType) handleAuth() {
 }
 
 func Start() {
+	piholeURL, piholeURLExists := os.LookupEnv("PIHOLE_URL")
+	if !piholeURLExists {
+		panic("'PIHOLE_URL' not set")
+	}
+
 	password, passwordExists := os.LookupEnv("PIHOLE_PASSWORD")
 	if !passwordExists {
 		panic("'PIHOLE_PASSWORD' not set")
@@ -44,6 +50,7 @@ func Start() {
 	appContext, appContextCancel := context.WithCancelCause(context.Background())
 	app := AppType{
 		PiholePassword: password,
+		PiholeURL:      piholeURL,
 		mutex:          sync.Mutex{},
 		ctx:            appContext,
 		cancelCtx:      appContextCancel,
