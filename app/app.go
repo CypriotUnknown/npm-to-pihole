@@ -86,7 +86,7 @@ func Start() {
 		panic("invalid value for 'RUN_ON_START'. if specified, it can only be true or false.")
 	}
 
-	go app.authenticatePihole()
+	app.authenticatePihole()
 
 	slog.Info("Watching for changes in Nginx proxy configuration files...")
 
