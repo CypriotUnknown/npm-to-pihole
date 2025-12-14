@@ -73,6 +73,8 @@ func Start() {
 		}
 	}()
 
+	app.authenticatePihole()
+
 	watcher := app.createNginxProxyHostsDirectoryWatcher()
 	defer watcher.Close()
 
@@ -85,8 +87,6 @@ func Start() {
 	} else if runOnStart != "" && runOnStart != "false" {
 		panic("invalid value for 'RUN_ON_START'. if specified, it can only be true or false.")
 	}
-
-	app.authenticatePihole()
 
 	slog.Info("Watching for changes in Nginx proxy configuration files...")
 
