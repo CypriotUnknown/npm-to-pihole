@@ -16,11 +16,14 @@ import (
 
 func (app *AppType) editCnames(requests []models.PiholeConfigRequest) {
 	for i, request := range requests {
-		endpoint := url.URL{
-			Scheme: "https",
-			Host:   "Pihole",
-			Path:   fmt.Sprintf("/api/config/dns/cnameRecords/%s", request.Cname),
+		endpoint, err := url.Parse(app.PiholeURL)
+
+		if err != nil {
+			slog.Error("error parsing url", "error", err)
+			panic("could not join path for url")
 		}
+
+		endpoint.Path = fmt.Sprintf("/api/config/dns/cnameRecords/%s", request.Cname)
 
 		query := endpoint.Query()
 		restartFTL := i == (len(requests) - 1)

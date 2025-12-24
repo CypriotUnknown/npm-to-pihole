@@ -12,11 +12,14 @@ import (
 )
 
 func (app *AppType) getPiholeCnames() map[string]string {
-	cnamesURL := url.URL{
-		Scheme: "https",
-		Host:   "Pihole",
-		Path:   "/api/config/dns/cnameRecords",
+	cnamesURL, err := url.Parse(app.PiholeURL)
+
+	if err != nil {
+		slog.Error("error parsing url", "error", err)
+		panic("could not join path for url")
 	}
+
+	cnamesURL.Path = "api/config/dns/cnameRecords"
 
 	cnamesRequest, err := http.NewRequestWithContext(app.ctx, "GET", cnamesURL.String(), nil)
 	if err != nil {

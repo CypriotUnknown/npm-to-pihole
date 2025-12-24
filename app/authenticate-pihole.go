@@ -13,11 +13,19 @@ import (
 )
 
 func (app *AppType) authenticatePihole() {
-	requestURL := url.URL{
-		Scheme: "https",
-		Host:   "Pihole",
-		Path:   "/api/auth",
+	// requestURL := url.URL{
+	// 	Scheme: "https",
+	// 	Host:   "Pihole",
+	// 	Path:   "/api/auth",
+	// }
+
+	requestURL, err := url.Parse(app.PiholeURL)
+	if err != nil {
+		slog.Error("error parsing url", "error", err)
+		panic("could not join path for url")
 	}
+
+	requestURL.Path = "api/auth"
 
 	body := struct {
 		Password string `json:"password"`

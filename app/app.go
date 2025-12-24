@@ -19,6 +19,7 @@ type AppType struct {
 	ctx            context.Context
 	cancelCtx      context.CancelCauseFunc
 	PiholePassword string
+	PiholeURL      string
 	mginxProxyDir  string
 	PiholeAuth     *models.PiholeAuthResponse
 	httpClient     *http.Client
@@ -30,6 +31,11 @@ func (app *AppType) handleAuth() {
 }
 
 func Start() {
+	piholeURL, piholeURLExists := os.LookupEnv("PIHOLE_URL")
+	if !piholeURLExists {
+		panic("'PIHOLE_URL' not set")
+	}
+
 	password, passwordExists := os.LookupEnv("PIHOLE_PASSWORD")
 	if !passwordExists {
 		panic("'PIHOLE_PASSWORD' not set")
@@ -44,6 +50,7 @@ func Start() {
 	appContext, appContextCancel := context.WithCancelCause(context.Background())
 	app := AppType{
 		PiholePassword: password,
+		PiholeURL:      piholeURL,
 		mutex:          sync.Mutex{},
 		ctx:            appContext,
 		cancelCtx:      appContextCancel,
@@ -66,6 +73,8 @@ func Start() {
 		}
 	}()
 
+	app.authenticatePihole()
+
 	watcher := app.createNginxProxyHostsDirectoryWatcher()
 	defer watcher.Close()
 
@@ -78,8 +87,6 @@ func Start() {
 	} else if runOnStart != "" && runOnStart != "false" {
 		panic("invalid value for 'RUN_ON_START'. if specified, it can only be true or false.")
 	}
-
-	go app.authenticatePihole()
 
 	slog.Info("Watching for changes in Nginx proxy configuration files...")
 
