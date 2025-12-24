@@ -33,11 +33,13 @@ services:
     environment:
       PIHOLE_PASSWORD: <PIHOLE APP PASSWORD>
       NGINX_PROXY_DIR: /data/nginx/nginx/proxy_host
+      PIHOLE_URL: <PIHOLE URL>
 ```
 
 ## Environment variables
 
 - `PIHOLE_PASSWORD` (required): The Pi-hole web/admin password used to authenticate with the Pi-hole API.
+- `PIHOLE_URL` (required): The Pi-hole endpoint.
 - `NGINX_PROXY_DIR` (optional): Path inside the container to the folder that contains Nginx Proxy Manager `proxy_host` configuration files. Default used by the program is `/data/nginx/nginx/proxy_host`.
 - `RUN_ON_START` (optional): If set to true, when the container launches, an immediate check and fix for the differences will take place.
 
