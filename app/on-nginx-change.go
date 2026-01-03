@@ -55,6 +55,16 @@ func (app *AppType) createExecuter() (debounced func(), cancel func()) {
 
 		wg.Wait()
 
+		slices.SortFunc(piholeConfigRequests, func(a, b models.PiholeConfigRequest) int {
+			if a.Type == constants.PiholeDeleteRequest && b.Type == constants.PiholeDeleteRequest {
+				return 0
+			} else if a.Type == constants.PiholeDeleteRequest && b.Type == constants.PiholePutRequest {
+				return 1
+			} else {
+				return -1
+			}
+		})
+
 		app.editCnames(piholeConfigRequests)
 	})
 
